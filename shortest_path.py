@@ -50,8 +50,8 @@ def shortest_path(graph, source, target):
   # Now we get to the loop.
   while not pq.empty():
     u = pq.get()
-    if u not in visited: # If we haven't considered u's neighbors already
-      visited.add(u)
+    if u[1] not in visited: # If we haven't considered u's neighbors already
+      visited.add(u[1])
       neighbors = graph.get_neighbors(u[1])
       if neighbors:
         for v in neighbors:
