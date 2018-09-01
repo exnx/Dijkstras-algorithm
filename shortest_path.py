@@ -50,26 +50,28 @@ def shortest_path(graph, source, target):
     visited = []  # reset visited nodes list
     
     shortest_distance[source] = 0
-    pq.put(source)
+
+    pq.put((shortest_distance[source], source))
 
     while not pq.empty():
-        curr_node = pq.get()
+        curr_edge = pq.get()
         
-        if curr_node not in visited:
-            visited.append(curr_node)
+        if curr_edge[1] not in visited:
+            visited.append(curr_edge[1])
+            print curr_edge
         
             # add all its neighbors to the pq
-            neighbors = graph.get_neighbors(curr_node)
+            neighbors = graph.get_neighbors(curr_edge[1])
             
             if neighbors:
                 for neighbor_node, neighbor_dist in neighbors:
-                    pq.put(neighbor_node)  # add only the node
+                    pq.put((neighbor_dist, neighbor_node))  # add only the node
 
-                    proposed_dist = shortest_distance[curr_node] + neighbor_dist
+                    proposed_dist = shortest_distance[curr_edge[1]] + neighbor_dist
                     
                     if proposed_dist < shortest_distance[neighbor_node]:
                         shortest_distance[neighbor_node] = proposed_dist
-                        previous_node[neighbor_node] = curr_node
+                        previous_node[neighbor_node] = curr_edge[1]
                 
     # work backgrounds through the previous node dict and save path    
     curr = target
@@ -79,15 +81,33 @@ def shortest_path(graph, source, target):
     short_path.insert(0, curr)  # insert the last, source node
     
     return (short_path, shortest_distance[target])
-    
+
+adjacency_graph = Graph()
+
+
+
+##
+# adjacency_graph.add_edge('a', 'd', 1)
+# adjacency_graph.add_edge('a', 'c', 15)
+# adjacency_graph.add_edge('b', 't', 1)
+# adjacency_graph.add_edge('d', 't', 1)
+# adjacency_graph.add_edge('a', 't', 21)
+# adjacency_graph.add_edge('b', 'u', 1)
+# adjacency_graph.add_edge('b', 't', 6)
+# adjacency_graph.add_edge('u', 't', 2)
+# adjacency_graph.add_edge('c', 't', 20)
+
+# print shortest_path(adjacency_graph, 'a', 't')
+
 
 graph1 = Graph()
-graph1.add_edge('a', 'b', 5)
-graph1.add_edge('b', 'c', 10)
+graph1.add_edge('t', 'a', 5)
+graph1.add_edge('a', 'c', 10)
 graph1.add_edge('c', 'd', 6)
 graph1.add_edge('d', 'e', 12)
-graph1.add_edge('a', 'd', 2)
-path = shortest_path(graph1, 'a', 'e')
+graph1.add_edge('t', 'd', 2)
+
+path = shortest_path(graph1, 't', 'e')
 print path        
                 
                 
