@@ -54,24 +54,26 @@ def shortest_path(graph, source, target):
     pq.put((shortest_distance[source], source))
 
     while not pq.empty():
-        curr_edge = pq.get()
+        frontier_edge = pq.get()  
+        curr_node = frontier_edge[1]
         
-        if curr_edge[1] not in visited:
-            visited.append(curr_edge[1])
-            print curr_edge
+        if curr_node not in visited:
+            visited.append(curr_node)
         
             # add all its neighbors to the pq
-            neighbors = graph.get_neighbors(curr_edge[1])
+            neighbors = graph.get_neighbors(curr_node)
             
             if neighbors:
                 for neighbor_node, neighbor_dist in neighbors:
-                    pq.put((neighbor_dist, neighbor_node))  # add only the node
-
-                    proposed_dist = shortest_distance[curr_edge[1]] + neighbor_dist
                     
+                    proposed_dist = shortest_distance[curr_node] + neighbor_dist
+                    # add the frontier_edge
+                    # which will prioritize on proposed edge distance, not just the edge weight
+                    pq.put((proposed_dist, neighbor_node))  
+
                     if proposed_dist < shortest_distance[neighbor_node]:
                         shortest_distance[neighbor_node] = proposed_dist
-                        previous_node[neighbor_node] = curr_edge[1]
+                        previous_node[neighbor_node] = curr_node
                 
     # work backgrounds through the previous node dict and save path    
     curr = target
@@ -87,7 +89,6 @@ adjacency_graph = Graph()
 
 
 ##
-# adjacency_graph.add_edge('a', 'd', 1)
 # adjacency_graph.add_edge('a', 'c', 15)
 # adjacency_graph.add_edge('b', 't', 1)
 # adjacency_graph.add_edge('d', 't', 1)
